@@ -39,27 +39,41 @@
     box-shadow: 0 0 20px rgba(0,0,0,0.15);
   }
 
-  h1 {
+  h1 { color: #b30000; font-size: 32px; margin-bottom: 15px; }
+  #poemTitle { color: #900; font-size: 22px; margin-bottom: 15px; font-weight: bold; }
+  #poem { white-space: pre-line; font-size: 20px; line-height: 2; color: #222; margin-top: 20px; }
+
+  .unique-code {
+    margin-top: 25px;
+    font-size: 18px;
+    background: #f2f2f2;
+    padding: 10px 15px;
+    border-radius: 12px;
+    display: inline-block;
+  }
+
+  button.copy-btn {
+    margin-left: 10px;
+    padding: 8px 15px;
+    font-size: 16px;
+    border: none;
+    background: #b30000;
+    color: white;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.2s;
+  }
+  button.copy-btn:hover { background: #ff1a1a; }
+
+  .instagram-link {
+    display: block;
+    margin-top: 25px;
+    font-size: 18px;
     color: #b30000;
-    font-size: 32px;
-    margin-bottom: 15px;
+    text-decoration: none;
+    transition: 0.2s;
   }
-
-  #poemTitle {
-    color: #900;
-    font-size: 22px;
-    margin-bottom: 15px;
-    font-weight: bold;
-  }
-
-  #poem {
-    white-space: pre-line;
-    font-size: 20px;
-    line-height: 2;
-    color: #222;
-    margin-top: 20px;
-  }
-
+  .instagram-link:hover { color: #ff1a1a; }
 </style>
 </head>
 
@@ -73,6 +87,15 @@
   <div id="poemTitle">در حال دریافت فال...</div>
   <div id="poem">لطفاً کمی صبر کنید...</div>
 
+  <div class="unique-code-container" style="display:none;">
+    <span>کد یونیک شما: </span>
+    <span class="unique-code" id="uniqueCode"></span>
+    <button class="copy-btn" onclick="copyCode()">کپی</button>
+  </div>
+
+  <a href="https://www.instagram.com/arena_lifescience/?hl=en" target="_blank" class="instagram-link">
+    صفحه اینستاگرام آرنا حیات دانش
+  </a>
 </div>
 
 <script>
@@ -90,10 +113,34 @@
       document.getElementById("poemTitle").innerText = title;
       document.getElementById("poem").innerText = poem;
 
+      // تولید کد یونیک
+      generateUniqueCode();
+
     } catch (err) {
       document.getElementById("poemTitle").innerText = "خطا در دریافت فال!";
       document.getElementById("poem").innerText = "لطفاً دوباره امتحان کنید.";
     }
+  }
+
+  function generateUniqueCode() {
+    // زمان فعلی به مبنای 36، 4 رقم آخر
+    const timestampPart = Date.now().toString(36).slice(-4).toUpperCase();
+    // رشته تصادفی 3 حرفی
+    const randomPart = Math.random().toString(36).substring(2, 5).toUpperCase();
+    // پیشوند Yalda-
+    const code = `Yalda-${timestampPart}${randomPart}`;
+
+    const codeSpan = document.getElementById("uniqueCode");
+    codeSpan.innerText = code;
+
+    document.querySelector(".unique-code-container").style.display = "block";
+  }
+
+  function copyCode() {
+    const code = document.getElementById("uniqueCode").innerText;
+    navigator.clipboard.writeText(code).then(() => {
+      alert("کد شما کپی شد!");
+    });
   }
 
   getHafez();
