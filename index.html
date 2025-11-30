@@ -56,7 +56,6 @@
   button:hover { background: #ff1a1a; transform: scale(1.05); }
 </style>
 </head>
-
 <body>
 <div class="overlay"></div>
 <div class="box">
@@ -64,14 +63,21 @@
   <p>برای ورود به بازی لطفاً اطلاعات خود را وارد کنید</p>
 
   <input type="text" id="fullName" placeholder="نام و نام خانوادگی" required><br>
-  <input type="text" id="personalCode" placeholder="کد پرسنلی (فقط عدد)" pattern="\d{1,10}" title="کد پرسنلی باید فقط عدد باشد" required><br>
-  <input type="text" id="phoneNumber" placeholder="شماره موبایل (09XXXXXXXXX)" pattern="09\d{9}" title="شماره موبایل باید 11 رقم و با 09 شروع شود" required><br>
+  <input type="text" id="personalCode" placeholder="کد پرسنلی (فقط عددانگلیسی)" pattern="\d{1,10}" title="کد پرسنلی باید فقط عدد انگلیسی باشد" required><br>
+  <input type="text" id="phoneNumber" placeholder="شماره موبایل (09XXXXXXXXX)" pattern="09\d{9}" title="شماره موبایل باید 11 رقم انگلیسی و با 09 شروع شود" required><br>
 
   <button onclick="startGame()">شروع بازی 🍉</button>
 </div>
 
 <script>
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzAPTTnfKuqEEpVMZj8ADAild9WOVt5HqQmQ6RxZKw08EfHgagWR_DT11Nmy1ztVafRig/exec"; // جایگزین با لینک خودت
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyv3k61GBYa1NxHy_UiRnzeds8Fu4Kw5yZRGfx9K4eIDDMC2qawMZGycVKmnCmE7WZ2/exec"; // لینک Web App خودت
+
+// تولید شناسه یکتا برای دستگاه
+let deviceId = localStorage.getItem("deviceId");
+if(!deviceId){
+  deviceId = crypto.randomUUID();
+  localStorage.setItem("deviceId", deviceId);
+}
 
 function startGame() {
   const codeInput = document.getElementById("personalCode");
@@ -86,8 +92,14 @@ function startGame() {
   const phone = phoneInput.value.trim();
   const fullname = nameInput.value.trim();
 
-  // بررسی کد پرسنلی قبل از بازی
-  fetch(SCRIPT_URL + "?" + new URLSearchParams({action: "validate", code, phone, fullname}))
+  // اعتبارسنجی کد پرسنلی و دستگاه
+  fetch(SCRIPT_URL + "?" + new URLSearchParams({
+    action: "validate",
+    code,
+    phone,
+    fullname,
+    deviceId
+  }))
     .then(res => res.json())
     .then(data => {
       if (data.status === "success") {
