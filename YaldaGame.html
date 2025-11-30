@@ -48,7 +48,7 @@
 </div>
 
 <script>
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyv3k61GBYa1NxHy_UiRnzeds8Fu4Kw5yZRGfx9K4eIDDMC2qawMZGycVKmnCmE7WZ2/exec"; // جایگزین با لینک خودت
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwZPQ_u3aQHA7grtWcLZYzrXQNbDeWfRTfHoPrrrkGswo8rcATCjhu4Cd2h8M8HsZt3EQ/exec"; // لینک Web App خودت
 
 let score = 0;
 
@@ -78,8 +78,11 @@ function choose(i) {
   const correct = questions[index].answer;
   const options = document.querySelectorAll(".option");
 
+  // رنگ پاسخ صحیح
   options[correct].style.background="#4CAF50"; options[correct].style.color="white";
-  if(i!==correct){ options[i].style.background="#b30000"; options[i].style.color="white"; } else { score++; }
+  // رنگ پاسخ کاربر در صورت اشتباه
+  if(i!==correct){ options[i].style.background="#b30000"; options[i].style.color="white"; } 
+  else { score++; }
 
   index++;
   setTimeout(loadQuestion,600);
@@ -90,20 +93,19 @@ function saveScore() {
   document.getElementById("optionsBox").innerHTML="";
 
   const data = {
-    action:"saveScore",
+    action: "saveScore",
     code: localStorage.getItem("personCode"),
     phone: localStorage.getItem("phoneNumber"),
     fullname: localStorage.getItem("fullName"),
+    deviceId: localStorage.getItem("deviceId"), // اضافه شد
     score: score
   };
 
-  const params = new URLSearchParams(data);
-
-  fetch(SCRIPT_URL + "?" + params.toString())
+  fetch(SCRIPT_URL + "?" + new URLSearchParams(data))
     .then(res=>res.json())
     .then(result=>{
       if(result.status==="success"){
-        window.location.href="hafez.html";
+        window.location.href="hafez.html"; // صفحه فال حافظ
       } else {
         alert(result.message || "خطا در ثبت امتیاز!");
         console.log(result);
