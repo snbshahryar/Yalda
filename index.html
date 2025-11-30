@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>شب یلدا | خوش آمدید</title>
 <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazir-font@v30.1.0/dist/font-face.css" rel="stylesheet">
-
 <style>
   body {
     font-family: 'Vazir', sans-serif;
@@ -20,15 +19,7 @@
     justify-content: center;
     align-items: center;
   }
-
-  .overlay {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: rgba(255, 0, 0, 0.45);
-    z-index: 0;
-  }
-
+  .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,0,0,0.45); z-index: 0; }
   .box {
     position: relative;
     z-index: 2;
@@ -40,10 +31,8 @@
     text-align: center;
     box-shadow: 0 0 20px rgba(0,0,0,0.2);
   }
-
   h1 { color: #b30000; margin-bottom: 10px; font-size: 26px; }
   p { font-size: 17px; color: #333; }
-
   input {
     width: 250px;
     padding: 10px;
@@ -52,7 +41,6 @@
     margin-top: 15px;
     font-family: 'Vazir', sans-serif;
   }
-
   button {
     margin-top: 20px;
     padding: 12px 35px;
@@ -70,13 +58,12 @@
 </head>
 
 <body>
-
 <div class="overlay"></div>
-
 <div class="box">
   <h1>🎉 شب یلدا مبارک 🎉</h1>
   <p>برای ورود به بازی لطفاً اطلاعات خود را وارد کنید</p>
 
+  <input type="text" id="fullName" placeholder="نام و نام خانوادگی" required><br>
   <input type="text" id="personalCode" placeholder="کد پرسنلی (فقط عدد)" pattern="\d{1,10}" title="کد پرسنلی باید فقط عدد باشد" required><br>
   <input type="text" id="phoneNumber" placeholder="شماره موبایل (09XXXXXXXXX)" pattern="09\d{9}" title="شماره موبایل باید 11 رقم و با 09 شروع شود" required><br>
 
@@ -84,32 +71,40 @@
 </div>
 
 <script>
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzAPTTnfKuqEEpVMZj8ADAild9WOVt5HqQmQ6RxZKw08EfHgagWR_DT11Nmy1ztVafRig/exec"; // جایگزین با لینک خودت
+
 function startGame() {
   const codeInput = document.getElementById("personalCode");
   const phoneInput = document.getElementById("phoneNumber");
+  const nameInput = document.getElementById("fullName");
 
-  // اعتبارسنجی با HTML pattern
-  if (!codeInput.checkValidity()) {
-    alert(codeInput.title);
-    codeInput.focus();
-    return;
-  }
-
-  if (!phoneInput.checkValidity()) {
-    alert(phoneInput.title);
-    phoneInput.focus();
-    return;
-  }
+  if (!nameInput.checkValidity()) { alert("لطفاً نام و نام خانوادگی را وارد کنید"); nameInput.focus(); return; }
+  if (!codeInput.checkValidity()) { alert(codeInput.title); codeInput.focus(); return; }
+  if (!phoneInput.checkValidity()) { alert(phoneInput.title); phoneInput.focus(); return; }
 
   const code = codeInput.value.trim();
   const phone = phoneInput.value.trim();
+  const fullname = nameInput.value.trim();
 
-  localStorage.setItem("personCode", code);
-  localStorage.setItem("phoneNumber", phone);
-
-  window.location.href = "YaldaGame.html";
+  // بررسی کد پرسنلی قبل از بازی
+  fetch(SCRIPT_URL + "?" + new URLSearchParams({action: "validate", code, phone, fullname}))
+    .then(res => res.json())
+    .then(data => {
+      if (data.status === "success") {
+        // ذخیره در localStorage و رفتن به بازی
+        localStorage.setItem("personCode", code);
+        localStorage.setItem("phoneNumber", phone);
+        localStorage.setItem("fullName", fullname);
+        window.location.href = "YaldaGame.html";
+      } else {
+        alert(data.message);
+      }
+    })
+    .catch(err => {
+      alert("خطا در ارتباط با سرور!");
+      console.log(err);
+    });
 }
 </script>
-
 </body>
 </html>
