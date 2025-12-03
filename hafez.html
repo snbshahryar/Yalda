@@ -39,9 +39,26 @@
     box-shadow: 0 0 20px rgba(0,0,0,0.15);
   }
 
-  h1 { color: #b30000; font-size: 32px; margin-bottom: 15px; }
-  #poemTitle { color: #900; font-size: 22px; margin-bottom: 15px; font-weight: bold; }
-  #poem { white-space: pre-line; font-size: 20px; line-height: 2; color: #222; margin-top: 20px; }
+  h1 { 
+    color: #b30000; 
+    font-size: 32px; 
+    margin-bottom: 15px; 
+  }
+
+  #poemTitle { 
+    color: #900; 
+    font-size: 22px; 
+    margin-bottom: 15px; 
+    font-weight: bold; 
+  }
+
+  #poem {
+    white-space: pre-line;
+    font-size: 20px;
+    line-height: 2;
+    color: #222;
+    margin-top: 20px;
+  }
 
   .unique-code {
     margin-top: 25px;
@@ -69,7 +86,7 @@
     display: block;
     margin-top: 25px;
     font-size: 18px;
-    color: #b30000;
+    color: #0075f3;
     text-decoration: none;
     transition: 0.2s;
   }
@@ -93,8 +110,17 @@
     <button class="copy-btn" onclick="copyCode()">کپی</button>
   </div>
 
-  <a href="https://www.instagram.com/arena_lifescience/?hl=en" target="_blank" class="instagram-link">
-    صفحه اینستاگرام آرنا حیات دانش
+  <a href="https://www.instagram.com/arena_lifescience/?hl=en" 
+     target="_blank" 
+     class="instagram-link"
+     style="display:flex; justify-content:center; align-items:center; gap:8px;">
+
+    <!-- آیکون اینستاگرام (SVG) -->
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#E1306C" viewBox="0 0 24 24">
+      <path d="M12 2.2c3.2 0 3.6 0 4.9.1 1.2.1 1.8.3 2.2.5.6.3 1 .7 1.4 1.4.3.4.5 1 .5 2.2.1 1.3.1 1.7.1 4.9s0 3.6-.1 4.9c-.1 1.2-.3 1.8-.5 2.2-.3.6-.7 1-1.4 1.4-.4.3-1 .5-2.2.5-1.3.1-1.7.1-4.9.1s-3.6 0-4.9-.1c-1.2-.1-1.8-.3-2.2-.5-.6-.3-1-.7-1.4-1.4-.3-.4-.5-1-.5-2.2-.1-1.3-.1-1.7-.1-4.9s0-3.6.1-4.9c.1-1.2.3-1.8.5-2.2.3-.6.7-1 1.4-1.4.4-.3 1-.5 2.2-.5C8.4 2.2 8.8 2.2 12 2.2m0-2.2C8.7 0 8.3 0 7 0.1 5.7 0.2 4.8 0.4 4 0.8c-.9.4-1.6 1-2.2 1.7-.7.7-1.3 1.4-1.7 2.2-.4.8-.6 1.7-.7 3C-0 8.8-0 9.3 0 12s0 3.2.1 4.5c.1 1.3.3 2.2.7 3 .4.9 1 1.6 1.7 2.2.7.7 1.4 1.3 2.2 1.7.8.4 1.7.6 3 .7C8.8 24 9.3 24 12 24s3.2 0 4.5-.1c1.3-.1 2.2-.3 3-.7.9-.4 1.6-1 2.2-1.7.7-.7 1.3-1.4 1.7-2.2.4-.8.6-1.7.7-3 .1-1.3.1-1.8.1-4.5s0-3.2-.1-4.5c-.1-1.3-.3-2.2-.7-3-.4-.9-1-1.6-1.7-2.2-.7-.7-1.4-1.3-2.2-1.7-.8-.4-1.7-.6-3-.7C15.2 0 14.7 0 12 0zm0 5.9a6.1 6.1 0 1 0 0 12.2 6.1 6.1 0 0 0 0-12.2zm0 10.1a4 4 0 1 1 0-8.1 4 4 0 0 1 0 8.1zm6.4-11a1.4 1.4 0 1 1-2.8 0 1.4 1.4 0 0 1 2.8 0z"/>
+    </svg>
+
+    arena_lifescience
   </a>
 </div>
 
@@ -113,7 +139,6 @@
       document.getElementById("poemTitle").innerText = title;
       document.getElementById("poem").innerText = poem;
 
-      // تولید کد یونیک
       generateUniqueCode();
 
     } catch (err) {
@@ -123,16 +148,11 @@
   }
 
   function generateUniqueCode() {
-    // زمان فعلی به مبنای 36، 4 رقم آخر
     const timestampPart = Date.now().toString(36).slice(-4).toUpperCase();
-    // رشته تصادفی 3 حرفی
     const randomPart = Math.random().toString(36).substring(2, 5).toUpperCase();
-    // پیشوند Yalda-
     const code = `Yalda-${timestampPart}${randomPart}`;
 
-    const codeSpan = document.getElementById("uniqueCode");
-    codeSpan.innerText = code;
-
+    document.getElementById("uniqueCode").innerText = code;
     document.querySelector(".unique-code-container").style.display = "block";
   }
 

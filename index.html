@@ -54,9 +54,38 @@
     font-family: 'Vazir', sans-serif !important;
   }
   button:hover { background: #ff1a1a; transform: scale(1.05); }
+
+  /* پاپ‌آپ لودینگ */
+  #loadingPopup {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.5);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+  }
+
+  #loadingBox {
+    background: white;
+    padding: 25px 35px;
+    border-radius: 15px;
+    font-size: 18px;
+    color: #b30000;
+    box-shadow: 0 0 15px rgba(0,0,0,0.3);
+    text-align: center;
+  }
+
 </style>
 </head>
 <body>
+
+<!-- پاپ‌آپ لودینگ -->
+<div id="loadingPopup">
+  <div id="loadingBox">لطفاً منتظر بمانید...<br>در حال بررسی اطلاعات</div>
+</div>
+
 <div class="overlay"></div>
 <div class="box">
   <h1>🎉 شب یلدا مبارک 🎉</h1>
@@ -70,7 +99,7 @@
 </div>
 
 <script>
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwZPQ_u3aQHA7grtWcLZYzrXQNbDeWfRTfHoPrrrkGswo8rcATCjhu4Cd2h8M8HsZt3EQ/exec"; // لینک Web App خودت
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwZPQ_u3aQHA7grtWcLZYzrXQNbDeWfRTfHoPrrrkGswo8rcATCjhu4Cd2h8M8HsZt3EQ/exec";
 
 // تولید شناسه یکتا برای دستگاه
 let deviceId = localStorage.getItem("deviceId");
@@ -92,7 +121,10 @@ function startGame() {
   const phone = phoneInput.value.trim();
   const fullname = nameInput.value.trim();
 
-  // اعتبارسنجی کد پرسنلی و دستگاه
+  // نمایش پاپ‌آپ لودینگ
+  document.getElementById("loadingPopup").style.display = "flex";
+
+  // اعتبارسنجی
   fetch(SCRIPT_URL + "?" + new URLSearchParams({
     action: "validate",
     code,
@@ -102,8 +134,9 @@ function startGame() {
   }))
     .then(res => res.json())
     .then(data => {
+      document.getElementById("loadingPopup").style.display = "none";
+
       if (data.status === "success") {
-        // ذخیره در localStorage و رفتن به بازی
         localStorage.setItem("personCode", code);
         localStorage.setItem("phoneNumber", phone);
         localStorage.setItem("fullName", fullname);
@@ -113,8 +146,9 @@ function startGame() {
       }
     })
     .catch(err => {
-      alert("خطا در ارتباط با سرور!");
       console.log(err);
+      document.getElementById("loadingPopup").style.display = "none";
+      alert("خطا در ارتباط با سرور!");
     });
 }
 </script>
