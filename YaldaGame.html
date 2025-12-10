@@ -48,7 +48,7 @@
 </div>
 
 <script>
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwZPQ_u3aQHA7grtWcLZYzrXQNbDeWfRTfHoPrrrkGswo8rcATCjhu4Cd2h8M8HsZt3EQ/exec"; // لینک Web App خودت
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwZPQ_u3aQHA7grtWcLZYzrXQNbDeWfRTfHoPrrrkGswo8rcATCjhu4Cd2h8M8HsZt3EQ/exec";
 
 let score = 0;
 
@@ -74,18 +74,17 @@ function loadQuestion() {
   document.getElementById("optionsBox").innerHTML = html;
 }
 
+// ❌ دیگر گزینه درست نمایش داده نمی‌شود
+// فقط امتیاز ثبت می‌شود و سؤال بعدی می‌آید
 function choose(i) {
   const correct = questions[index].answer;
-  const options = document.querySelectorAll(".option");
 
-  // رنگ پاسخ صحیح
-  options[correct].style.background="#4CAF50"; options[correct].style.color="white";
-  // رنگ پاسخ کاربر در صورت اشتباه
-  if(i!==correct){ options[i].style.background="#b30000"; options[i].style.color="white"; } 
-  else { score++; }
+  if (i === correct) {
+    score++;
+  }
 
   index++;
-  setTimeout(loadQuestion,600);
+  setTimeout(loadQuestion, 300);
 }
 
 function saveScore() {
@@ -97,7 +96,7 @@ function saveScore() {
     code: localStorage.getItem("personCode"),
     phone: localStorage.getItem("phoneNumber"),
     fullname: localStorage.getItem("fullName"),
-    deviceId: localStorage.getItem("deviceId"), // اضافه شد
+    deviceId: localStorage.getItem("deviceId"),
     score: score
   };
 
@@ -105,10 +104,9 @@ function saveScore() {
     .then(res=>res.json())
     .then(result=>{
       if(result.status==="success"){
-        window.location.href="hafez.html"; // صفحه فال حافظ
+        window.location.href="hafez.html";
       } else {
         alert(result.message || "خطا در ثبت امتیاز!");
-        console.log(result);
       }
     })
     .catch(err=>{
